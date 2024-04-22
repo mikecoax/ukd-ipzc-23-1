@@ -7,6 +7,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var githubRouter = require('./routes/github');
+var kypuSlonaRouter = require('./routes/kypu-slona');
+var carRouter = require('./routes/car')
+var roadRouter = require('./routes/road')
 
 var app = express();
 
@@ -23,6 +26,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/repositories', githubRouter);
+app.use('/kypu-slona', kypuSlonaRouter);
+app.use('/car', carRouter);
+app.use('/road',roadRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
