@@ -9,6 +9,7 @@ var usersRouter = require('./routes/users');
 var githubRouter = require('./routes/github');
 var kypuSlonaRouter = require('./routes/kypu-slona');
 var studentsRouter = require('./routes/students')
+var carRouter = require('./routes/car')
 
 var app = express();
 
@@ -27,6 +28,7 @@ app.use('/users', usersRouter);
 app.use('/repositories', githubRouter);
 app.use('/kypu-slona', kypuSlonaRouter);
 app.use('/students', studentsRouter)
+app.use('/car', carRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
