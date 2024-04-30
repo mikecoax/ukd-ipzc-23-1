@@ -1,30 +1,35 @@
-var express = require('express');
-var router = express.Router();
-var sequelize = require('../models/connect.js')
+router.patch('/:id', async function(req, res) {
 
-router.get('/', async function(req, res, next) {
-  const students = await sequelize.models.student.findAll()
-  res.json({ students });
-});
+  const id = parseInt(req.params.id, 10);
 
-router.post('/', async function(req, res, next) {
+  if (!id){
+    return res.status(400).json({Message: "id should be number 1 "})
+  }
+
+  const student = await sequelize.models.student.findOne({
+    where: {
+      id:id 
+    }
+  })
+
+  if (!student) {
+    return res.status(400).json({Message: "student not found"})
+  }
 
   const {
     firstName, lastName, URLfromGitHub
   } = req.body
 
-  await sequelize.models.student.create({
-    firstName,
-    lastName,
-    githubUrl: URLfromGitHub
-  })
+  student.lastName = lastName?.trim() || student.lastName;
+  student.firstName = firstName?.trim() || student.firstName
 
-  return res.json({firstName, lastName, URLfromGitHub})
-})
+  if (URLfromGitHub) {
+    student.URLfromGitHub = URLfromGitHub
+  }
 
-router.delete('/:id', async function(req, res, next){
-  console.log(req.params)
-  res.status(204).end()
+  const updatedStudent = await student.save({ returning: true })
+
+  return res.json(updatedStudent);
 })
 
 module.exports = router;
