@@ -9,6 +9,7 @@ var usersRouter = require('./routes/users');
 var githubRouter = require('./routes/github');
 var kypuSlonaRouter = require('./routes/kypu-slona');
 var studentsRouter = require('./routes/students')
+var newStudentsRouter = require('./routes/newStudents')
 var carRouter = require('./routes/car')
 var roadRouter = require('./routes/road');
 var packmanRouter = require('./routes/packman');
@@ -35,6 +36,7 @@ app.use('/car', carRouter);
 app.use('/road', roadRouter);
 app.use('/packman', packmanRouter);
 app.use('/pizza_menu', pizzaRouter)
+app.use('/newStudents', newStudentsRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
