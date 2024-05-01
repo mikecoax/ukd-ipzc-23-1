@@ -12,6 +12,7 @@ var studentsRouter = require('./routes/students')
 var carRouter = require('./routes/car')
 var roadRouter = require('./routes/road');
 var packmanRouter = require('./routes/packman');
+var pizzaRouter = require('./routes/pizza_menu')
 
 var app = express();
 
@@ -33,7 +34,7 @@ app.use('/students', studentsRouter)
 app.use('/car', carRouter);
 app.use('/road', roadRouter);
 app.use('/packman', packmanRouter);
-
+app.use('/pizza_menu', pizzaRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
