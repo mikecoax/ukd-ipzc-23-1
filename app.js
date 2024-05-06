@@ -1,20 +1,32 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const session = require('express-session');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var githubRouter = require('./routes/github');
-var kypuSlonaRouter = require('./routes/kypu-slona');
-var studentsRouter = require('./routes/students')
-var carRouter = require('./routes/car')
-var roadRouter = require('./routes/road');
-var packmanRouter = require('./routes/packman');
-var pizzaRouter = require('./routes/pizza_menu')
+const authRouter = require('./routes/auth');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const githubRouter = require('./routes/github');
+const kypuSlonaRouter = require('./routes/kypu-slona');
+const studentsRouter = require('./routes/students')
+const carRouter = require('./routes/car')
+const roadRouter = require('./routes/road');
+const packmanRouter = require('./routes/packman');
+const pizzaRouter = require('./routes/pizza_menu')
 
-var app = express();
+const app = express();
+
+const checkAuth = (req, res, next) => {
+  if (req.session.email) {
+    next();
+  } else {
+    res.redirect('/auth/login');
+  }
+}
+
+app.set('trust proxy', 1)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,10 +37,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'my-secret-key', //TODO change to env variable
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }, //set to true if https is used
+}));
 
 app.use('/', indexRouter);
+app.use('/auth', authRouter);
 app.use('/users', usersRouter);
-app.use('/repositories', githubRouter);
+app.use('/repositories', checkAuth, githubRouter);
 app.use('/kypu-slona', kypuSlonaRouter);
 app.use('/students', studentsRouter)
 app.use('/car', carRouter);
